@@ -87,7 +87,8 @@ if __name__ == "__main__":
     policy_kwargs = dict(
                             features_extractor_class=models.CustomCNN,
                             features_extractor_kwargs=dict(
-                                'network_config': config['network_params']),
+                                fc_features_dim=config['network_params']['fc_features_dim'],
+                                ),
                         )
 
     # create PPO model
