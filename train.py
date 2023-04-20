@@ -86,7 +86,7 @@ if __name__ == "__main__":
     # create custom feature extractor (ResNet-CNN) for agent training
     policy_kwargs = dict(
                             features_extractor_class=models.CustomCNN,
-                            features_extractor_kwargs=config['network_params'],
+                            features_extractor_kwargs=**config['network_params'],
                         )
 
     # create PPO model
