@@ -4,6 +4,7 @@ import argparse
 import time
 import torch
 from stable_baselines3 import PPO, DDPG
+from stable_baselines3.common.monitor import Monitor
 
 from callbacks import *
 from utils import * 
@@ -81,11 +82,11 @@ if __name__ == "__main__":
     env.reset()
 
     # print training info
-    print_training_info()
+    print_training_info(config)
 
     # train the agent
     model.learn(
-        total_timesteps=agent_config['total_training_steps'],
+        total_timesteps=config['training_params']['total_training_steps'],
         callback=callback,
         progress_bar=True
     )
