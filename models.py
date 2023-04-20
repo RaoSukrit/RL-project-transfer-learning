@@ -20,9 +20,9 @@ class CustomCNN(BaseFeaturesExtractor):
     """
 
     def __init__(self, observation_space: spaces.Box,
-                 features_dim: int = 256,
+                 fc_features_dim: int = 256,
                  cnn_model_type: str = 'resnet18'):
-        super().__init__(observation_space, features_dim, cnn_model_type)
+        super().__init__(observation_space, fc_features_dim, cnn_model_type)
         # We assume CxHxW images (channels first)
         # Re-ordering will be done by pre-preprocessing or wrapper
         n_input_channels = observation_space.shape[0]
@@ -40,7 +40,7 @@ class CustomCNN(BaseFeaturesExtractor):
                 torch.as_tensor(observation_space.sample()[None]).float()
             ).shape[1]
 
-        self.linear = nn.Sequential(nn.Linear(n_flatten, features_dim),
+        self.linear = nn.Sequential(nn.Linear(n_flatten, fc_features_dim),
                                     nn.ReLU())
 
     def forward(self, observations: torch.Tensor) -> torch.Tensor:
