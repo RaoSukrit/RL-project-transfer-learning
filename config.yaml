@@ -1,0 +1,32 @@
+---
+# general params
+env_params:
+  # high level params
+  domain_name: hopper
+  task_name: stand
+
+  # image params
+  height: 224
+  width: 224
+
+  # basic env params
+  from_pixels: true
+  visualize_reward: false
+
+agent_params:
+  model_type: CnnPolicy
+  total_training_steps: 100_000
+
+network_params:
+  cnn_model_type: resnet18
+  fc_features_dim: 128
+
+output_params:
+  savedir:
+  savename:
+  logdir: /scratch/str8775/conda_env/rl_project/logs
+
+callback_params:
+  ckpt_freq: 1000
+
+...
