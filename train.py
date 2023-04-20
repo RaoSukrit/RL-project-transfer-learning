@@ -92,11 +92,23 @@ if __name__ == "__main__":
     # create PPO model
     callback_config = config['callback_params']
     agent_config = config['agent_params']
-    model = PPO(agent_config['model_type'],
-                env,
-                verbose=1,
-                policy_kwargs=policy_kwargs,
-                device=device)
+
+    model_algo = agent_config['algo']
+    if model_algo == "PPO":
+        model = PPO(agent_config['model_type'],
+                    env,
+                    verbose=1,
+                    policy_kwargs=policy_kwargs,
+                    device=device)
+
+    elif model_algo == "DDPG":
+        model = DDPG(agent_config['model_type'],
+                     env,
+                     verbose=1,
+                     policy_kwargs=policy_kwargs,
+                     device=device)
+    else:
+        raise (ValueError, f"invalid model algo provided {model_algo}. Only PPO and DDPG are accepted")
 
     callback = tc.SaveOnBestTrainingRewardCallback(check_freq=callback_config['ckpt_freq'],
                                                    log_dir=logdir,
@@ -139,9 +151,9 @@ if __name__ == "__main__":
 
     savename = config['output_params']['savename']
     if savename is None:
-        savename = f"{domain_name}-{task_name}-{int(time.time())}"
+        savename = f"{model_algo}-{domain_name}-{task_name}-{int(time.time())}"
     else:
-        savename = f"{savename}-{int(time.time())}"
+        savename = f"{model_algo}-{savename}-{domain_name}-{task_name}-{int(time.time())}"
 
     model_savepath = os.path.join(savedir,
                                   savename)
