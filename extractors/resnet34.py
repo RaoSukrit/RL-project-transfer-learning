@@ -1,5 +1,4 @@
-# Resnet CNN
-import os
+# Resnet34 CNN
 import torch
 import torch.nn as nn
 

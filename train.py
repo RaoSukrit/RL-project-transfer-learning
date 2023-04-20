@@ -3,17 +3,7 @@ import yaml
 import argparse
 import time
 import torch
-
-import numpy as np
-import matplotlib.pyplot as plt
-
 from stable_baselines3 import PPO, DDPG
-from stable_baselines3.common import results_plotter
-from stable_baselines3.common.callbacks import BaseCallback
-from stable_baselines3.common.evaluation import evaluate_policy
-from stable_baselines3.common.monitor import Monitor
-from stable_baselines3.common.results_plotter import load_results, ts2xy, plot_results
-from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
 
 from callbacks import *
 from utils import * 
@@ -56,7 +46,7 @@ if __name__ == "__main__":
     policy_kwargs = dict(
         features_extractor_class=get_extractor(config['agent_params']),
         features_extractor_kwargs=dict(
-            fc_features_dim=config['network_params']['fc_features_dim'],
+            fc_features_dim=config['agent_params']['fc_features_dim'],
         ),
     )
 

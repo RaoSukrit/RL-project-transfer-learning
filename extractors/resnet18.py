@@ -1,11 +1,10 @@
-# Resnet CNN
-import os
+# Resnet18 CNN
 import torch
 import torch.nn as nn
 
 from gym import spaces
 from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
-from torchvision.models import resnet18, resnet34
+from torchvision.models import resnet18
 
 
 class CustomCNN(BaseFeaturesExtractor):

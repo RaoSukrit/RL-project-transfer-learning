@@ -1,5 +1,4 @@
-# Resnet CNN
-import os
+# Deepmind CNN
 import torch as th
 import torch.nn as nn
 
@@ -15,8 +14,11 @@ class CustomCNN(BaseFeaturesExtractor):
 
     def __init__(self, observation_space: spaces.Box,
                  fc_features_dim=128):
+        super().__init__(observation_space, fc_features_dim)
+
+        # get input channels
         n_input_channels = observation_space.shape[0]
-        
+
         # 3 conv layers with 32 filters each 
         self.cnn = nn.Sequential(
             nn.Conv2d(n_input_channels, 32, kernel_size=8, stride=4, padding=0),
