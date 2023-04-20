@@ -81,7 +81,7 @@ if __name__ == "__main__":
     env.reset()
 
     # print training info
-    print_training_info()
+    print_training_info(config)
 
     # train the agent
     model.learn(
