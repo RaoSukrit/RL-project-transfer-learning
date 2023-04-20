@@ -7,7 +7,7 @@ from stable_baselines3 import PPO, DDPG
 from stable_baselines3.common.monitor import Monitor
 
 from callbacks import *
-from utils import * 
+from utils import *
 
 # set MUJOCO_GL environment var
 os.environ['MUJOCO_GL'] = "osmesa"
@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     # create log dir
     logdir = make_log_dir(config)
-    
+
     # create env object
     env = create_env(config)
 
@@ -49,25 +49,35 @@ if __name__ == "__main__":
         features_extractor_kwargs=dict(
             fc_features_dim=config['agent_params']['fc_features_dim'],
         ),
+        net_arch=[32, 6],
+        n_critics=2,
     )
 
     # create agent
     agent_config = config['agent_params']
+    training_config = config['training_params']
+
+    train_freq = (training_config['train_freq_num'],
+                  training_config['train_freq_type'])
+
     model_algo = agent_config['algo']
     if model_algo == "PPO":
         model = PPO(agent_config['model_type'],
                     env,
                     verbose=1,
+                    batch_size=training_config['batch_size'],
                     policy_kwargs=policy_kwargs,
+                    train_freq=train_freq,
                     device=device)
 
     elif model_algo == "DDPG":
         model = DDPG(agent_config['model_type'],
                      env,
                      verbose=1,
-                     batch_size=agent_config['batch_size'],
+                     batch_size=training_config['batch_size'],
                      tau=agent_config['tau'],
                      policy_kwargs=policy_kwargs,
+                     train_freq=train_freq,
                      device=device)
     else:
         raise (ValueError, f"invalid model algo provided {model_algo}. Only PPO and DDPG are accepted")
