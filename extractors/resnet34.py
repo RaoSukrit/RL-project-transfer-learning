@@ -5,12 +5,7 @@ import torch.nn as nn
 
 from gym import spaces
 from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
-from torchvision.models import resnet18, resnet34
-
-# os.environ['MUJOCO_GL'] = 'glfw'
-os.environ['MUJOCO_GL'] = "osmesa"
-os.environ.get('MUJOCO_GL', 'MUJOCO_GL not set')
-
+from torchvision.models import resnet34
 
 class CustomCNN(BaseFeaturesExtractor):
     """
@@ -27,7 +22,7 @@ class CustomCNN(BaseFeaturesExtractor):
         n_input_channels = observation_space.shape[0]
 
         # if network_config['cnn_model_type'] == 'resnet18':
-        model = resnet18()
+        model = resnet34()
         # elif network_config['cnn_model_type'] == 'resnet34':
             # model = resnet34()
 

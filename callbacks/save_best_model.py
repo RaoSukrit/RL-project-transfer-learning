@@ -4,7 +4,6 @@ import numpy as np
 from stable_baselines3.common.results_plotter import load_results, ts2xy, plot_results
 from stable_baselines3.common.callbacks import BaseCallback
 
-
 class SaveOnBestTrainingRewardCallback(BaseCallback):
     """
     Callback for saving a model (the check is done every ``check_freq`` steps)
