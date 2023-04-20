@@ -74,6 +74,8 @@ if __name__ == "__main__":
         model = DDPG(agent_config['model_type'],
                      env,
                      verbose=1,
+                     batch_size=agent_config['batch_size'],
+                     tau=agent_config['tau'],
                      policy_kwargs=policy_kwargs,
                      device=device)
     else:
