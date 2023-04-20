@@ -22,8 +22,8 @@ network_params:
   fc_features_dim: 128
 
 output_params:
-  savedir:
-  savename:
+  savedir: /scratch/str8775/conda_env/rl_project/models/
+  savename: null
   logdir: /scratch/str8775/conda_env/rl_project/logs
 
 callback_params:

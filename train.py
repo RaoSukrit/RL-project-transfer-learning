@@ -8,6 +8,7 @@ import yaml
 import argparse
 
 import gym
+import time
 import dmc2gym
 import numpy as np
 import matplotlib.pyplot as plt
@@ -61,7 +62,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--config', type=str,
-                        default='.config.yaml'
+                        default='.config.yaml',
                         help='Path to config file specifiying user params')
 
     args = parser.parse_args()
@@ -128,6 +129,20 @@ if __name__ == "__main__":
                 callback=callback,
                 progress_bar=True)
 
-    model_savepath = os.path.join(config['output_params']['savedir'],
-                                  config['output_params']['savename'])
+    savedir = config['output_params']['savedir']
+    domain_name = env_config['domain_name']
+    task_name = env_config['task_name']
+
+    savedir = os.path.join(savedir, domain_name, task_name)
+    if not os.path.exists(savedir):
+        os.makedirs(savedir, exist_ok=True)
+
+    savename = config['output_params']['savename']
+    if savename is None:
+        savename = f"{domain_name}-{task_name}-{int(time.time())}"
+    else:
+        savename = f"{savename}-{int(time.time())}"
+
+    model_savepath = os.path.join(savedir,
+                                  savename)
     model.save(model_savepath)
