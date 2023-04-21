@@ -103,13 +103,18 @@ if __name__ == "__main__":
     # reset the env
     env.reset()
 
-
     # print training info
     print_training_info(config)
 
     savedir = config['output_params']['savedir']
     domain_name = config['env_params']['domain_name']
     task_name = config['env_params']['task_name']
+
+    callback.save_path = f"{callback.save_path}-{model_algo}-{domain_name}-{task_name}-{int(time.time())}"
+
+    print("*" * 50)
+    print(f"Saving best model with name {callback.save_path}")
+    print("*" * 50)
 
     # train the agent
     model.learn(
