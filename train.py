@@ -50,7 +50,6 @@ if __name__ == "__main__":
             fc_features_dim=config['agent_params']['fc_features_dim'],
         ),
         net_arch=[32, 6],
-        n_critics=2,
     )
 
     # create agent
@@ -66,8 +65,8 @@ if __name__ == "__main__":
                     env,
                     verbose=1,
                     batch_size=training_config['batch_size'],
-                    policy_kwargs=policy_kwargs,
-                    train_freq=train_freq,
+                    #policy_kwargs=policy_kwargs,
+                    #train_freq=train_freq,
                     device=device)
 
     elif model_algo == "DDPG":
@@ -76,7 +75,7 @@ if __name__ == "__main__":
                      verbose=1,
                      batch_size=training_config['batch_size'],
                      tau=agent_config['tau'],
-                     policy_kwargs=policy_kwargs,
+                     #policy_kwargs=policy_kwargs,
                      train_freq=train_freq,
                      device=device)
     else:
