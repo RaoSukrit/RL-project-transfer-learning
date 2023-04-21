@@ -22,10 +22,10 @@ agent_params:
   tau: 0.001
 
 training_params:
-  total_training_steps: 100_000
+  total_training_steps: 1_000_000
   batch_size: 64
   train_freq_type: step
-  train_freq_num: 100
+  train_freq_num: 1000
 
 output_params:
   savedir: /scratch/str8775/conda_env/rl_project/models/

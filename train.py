@@ -56,10 +56,11 @@ if __name__ == "__main__":
         features_extractor_kwargs=dict(
             fc_features_dim=fc_features_dim,
         ),
-        net_arch=[fc_features_dim / 2, n_actions],
+        net_arch=[int(fc_features_dim / 2), n_actions],
         n_critics=1,
     )
 
+    print(policy_kwargs)
 
     # create agent
     agent_config = config['agent_params']
