@@ -78,8 +78,7 @@ if __name__ == "__main__":
                     verbose=1,
                     batch_size=training_config['batch_size'],
                     policy_kwargs=policy_kwargs,
-                    device=device,
-                    action_noise=action_noise)
+                    device=device)
 
     elif model_algo == "DDPG":
         model = DDPG(agent_config['model_type'],
@@ -87,7 +86,7 @@ if __name__ == "__main__":
                      verbose=1,
                      batch_size=training_config['batch_size'],
                      tau=agent_config['tau'],
-                     #policy_kwargs=policy_kwargs,
+                     policy_kwargs=policy_kwargs,
                      train_freq=train_freq,
                      device=device,
                      action_noise=action_noise)

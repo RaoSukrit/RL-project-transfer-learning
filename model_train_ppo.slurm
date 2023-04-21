@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=PPO-vanilla-hopper-stand
+#SBATCH --job-name=PPO-hopper-stand
 #SBATCH --open-mode=append
 #SBATCH --output=/scratch/str8775/conda_env/rl_project/logs/slurm/%x_%j.out
 #SBATCH --error=/scratch/str8775/conda_env/rl_project/logs/slurm/%x_%j.err
@@ -11,9 +11,9 @@
 
 export ENV=$1
 
-singularity exec --nv --bind /scratch --overlay /scratch/str8775/conda_env/rl_project/rl_project_env${ENV}.ext3:ro /scratch/str8775/conda_env/cuda11.6.124-cudnn8.4.0.27-devel-ubuntu20.04.4.sif /bin/bash -c "
+singularity exec --nv --bind /scratch --overlay /scratch/str8775/conda_env/rl_project/rl_project_env${ENV}.ext3:rw /scratch/str8775/conda_env/cuda11.6.124-cudnn8.4.0.27-devel-ubuntu20.04.4.sif /bin/bash -c "
 source /ext3/env_miniforge3.sh
 conda activate rl_project
 cd /scratch/str8775/conda_env/rl_project/RL-project-transfer-learning
-python3 train.py --config=./configs/hopper_stand_ppo_dmcnn.yaml 
+python3 train.py --config=./configs/hopper_stand_ppo_dmcnn.yaml
 "
