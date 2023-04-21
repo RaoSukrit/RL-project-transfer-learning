@@ -3,8 +3,11 @@ import yaml
 import argparse
 import time
 import torch
+import numpy as np
 from stable_baselines3 import PPO, DDPG
 from stable_baselines3.common.monitor import Monitor
+from stable_baselines3.common.vec_env import DummyVecEnv, VecCheckNan
+from stable_baselines3.common.noise import NormalActionNoise
 
 from callbacks import *
 from utils import *
@@ -43,18 +46,27 @@ if __name__ == "__main__":
     # wrap env with Monitor
     env = Monitor(env, logdir)
 
+    # n_actions will be the dim of the output space of the network
+    n_actions = env.action_space.shape[-1]
+    fc_features_dim = config['agent_params']['fc_features_dim']
+
     # create custom feature extractor (ResNet-CNN) for agent training
     policy_kwargs = dict(
         features_extractor_class=get_extractor(config['agent_params']),
         features_extractor_kwargs=dict(
-            fc_features_dim=config['agent_params']['fc_features_dim'],
+            fc_features_dim=fc_features_dim,
         ),
-        net_arch=[32, 6],
+        net_arch=[fc_features_dim / 2, n_actions],
+        n_critics=1,
     )
 
     # create agent
     agent_config = config['agent_params']
     training_config = config['training_params']
+
+    # create action noise
+    action_noise = NormalActionNoise(mean=np.zeros(n_actions),
+                                     sigma=0.1 * np.ones(n_actions))
 
     train_freq = (training_config['train_freq_num'],
                   training_config['train_freq_type'])
@@ -65,9 +77,9 @@ if __name__ == "__main__":
                     env,
                     verbose=1,
                     batch_size=training_config['batch_size'],
-                    #policy_kwargs=policy_kwargs,
-                    #train_freq=train_freq,
-                    device=device)
+                    policy_kwargs=policy_kwargs,
+                    device=device,
+                    action_noise=action_noise)
 
     elif model_algo == "DDPG":
         model = DDPG(agent_config['model_type'],
@@ -77,7 +89,8 @@ if __name__ == "__main__":
                      tau=agent_config['tau'],
                      #policy_kwargs=policy_kwargs,
                      train_freq=train_freq,
-                     device=device)
+                     device=device,
+                     action_noise=action_noise)
     else:
         raise (ValueError, f"invalid model algo provided {model_algo}. Only PPO and DDPG are accepted")
 
@@ -90,19 +103,21 @@ if __name__ == "__main__":
     # reset the env
     env.reset()
 
+
     # print training info
     print_training_info(config)
-
-    # train the agent
-    model.learn(
-        total_timesteps=config['training_params']['total_training_steps'],
-        callback=callback,
-        progress_bar=True
-    )
 
     savedir = config['output_params']['savedir']
     domain_name = config['env_params']['domain_name']
     task_name = config['env_params']['task_name']
+
+    # train the agent
+    model.learn(
+        total_timesteps=config['training_params']['total_training_steps'],
+        tb_log_name=f"{model_algo}-{domain_name}-{task_name}-{int(time.time())}",
+        callback=callback,
+        progress_bar=True
+    )
 
     savedir = os.path.join(savedir, domain_name, task_name)
     if not os.path.exists(savedir):
