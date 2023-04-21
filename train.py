@@ -60,6 +60,7 @@ if __name__ == "__main__":
         n_critics=1,
     )
 
+
     # create agent
     agent_config = config['agent_params']
     training_config = config['training_params']
@@ -73,6 +74,8 @@ if __name__ == "__main__":
 
     model_algo = agent_config['algo']
     if model_algo == "PPO":
+        # remove n_critics param
+        policy_kwargs.pop('n_critics')
         model = PPO(agent_config['model_type'],
                     env,
                     verbose=1,
