@@ -25,6 +25,7 @@ training_params:
   batch_size: 64
   train_freq_type: step
   train_freq_num: 100
+  learning_rate: 3e-4
 
 output_params:
   savedir: /scratch/str8775/conda_env/rl_project/models/
