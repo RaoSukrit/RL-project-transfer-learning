@@ -22,7 +22,7 @@ agent_params:
 
 training_params:
   resume_training: true
-  load_model_ckpt_path: /scratch/str8775/conda_env/rl_project/logs/PPO/dmcnn/walker/stand/1682181547/best_model-PPO-walker-stand-1682181547
+  load_model_ckpt_path: /scratch/str8775/conda_env/rl_project/logs/PPO/dmcnn/walker/stand/1682181547/best_model-PPO-walker-stand-1682181547.zip
   total_training_steps: 10_000_000
   batch_size: 64
   train_freq_type: step

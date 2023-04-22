@@ -24,7 +24,7 @@ class SaveOnBestTrainingRewardCallback(BaseCallback):
 
     def _init_callback(self) -> None:
         # Create folder if needed
-        if self.save_path is not None:
+        if self.save_path is not None and not os.path.exists(self.save_path):
             os.makedirs(self.save_path, exist_ok=True)
 
     def _on_step(self) -> bool:

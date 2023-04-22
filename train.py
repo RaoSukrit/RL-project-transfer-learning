@@ -123,10 +123,26 @@ if __name__ == "__main__":
         print(f"Resuming training from {load_model_ckpt}!")
         print("*" * 50)
         if model_algo == "PPO":
-            model = PPO.load(load_model_ckpt, verbose=1,
+            policy_kwargs.pop('n_critics')
+            model = PPO.load(load_model_ckpt,
+                             env,
+                             learning_rate=training_config['learning_rate'],
+                             batch_size=training_config['batch_size'],
+                             verbose=1,
+                             policy_kwargs=policy_kwargs,
+                             device=device,
                              tensorboard_log=logdir)
         elif model_algo == "DDPG":
-            model = DDPG.load(load_model_ckpt, verbose=1,
+            model = DDPG.load(load_model_ckpt,
+                              env,
+                              verbose=1,
+                              learning_rate=training_config['learning_rate'],
+                              batch_size=training_config['batch_size'],
+                              tau=agent_config['tau'],
+                              policy_kwargs=policy_kwargs,
+                              train_freq=train_freq,
+                              device=device,
+                              action_noise=action_noise,
                               tensorboard_log=logdir)
         else:
             raise (ValueError, f"invalid model algo provided {model_algo}. Only PPO and DDPG are accepted")
