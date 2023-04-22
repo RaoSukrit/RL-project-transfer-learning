@@ -46,25 +46,26 @@ if __name__ == "__main__":
     # wrap env with Monitor
     env = Monitor(env, logdir)
 
-    # n_actions will be the dim of the output space of the network
-    n_actions = env.action_space.shape[-1]
-    fc_features_dim = config['agent_params']['fc_features_dim']
-
-    # create custom feature extractor (ResNet-CNN) for agent training
-    policy_kwargs = dict(
-        features_extractor_class=get_extractor(config['agent_params']),
-        features_extractor_kwargs=dict(
-            fc_features_dim=fc_features_dim,
-        ),
-        net_arch=[int(fc_features_dim / 2), n_actions],
-        n_critics=1,
-    )
-
-    print(policy_kwargs)
-
-    # create agent
+    # get configs 
     agent_config = config['agent_params']
     training_config = config['training_params']
+
+    # n_actions will be the dim of the output space of the network
+    n_actions = env.action_space.shape[-1]
+    fc_features_dim = agent_config['fc_features_dim']
+    policy_kwargs = {}
+
+    # create custom feature extractor if required
+    if agent_config['cnn_model_type']: 
+        policy_kwargs = dict(
+            features_extractor_class=get_extractor(agent_config),
+            features_extractor_kwargs=dict(
+                fc_features_dim=fc_features_dim,
+            ),
+            net_arch=[int(fc_features_dim / 2), n_actions],
+            n_critics=1,
+        )
+    print(policy_kwargs)
 
     # create action noise
     action_noise = NormalActionNoise(mean=np.zeros(n_actions),

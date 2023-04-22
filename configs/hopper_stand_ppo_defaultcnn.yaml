@@ -1,0 +1,36 @@
+---
+# general params
+env_params:
+  # high level params
+  domain_name: hopper
+  task_name: stand
+
+  # image params
+  height: 240
+  width: 320
+
+  # basic env params
+  from_pixels: true
+  visualize_reward: false
+
+agent_params:
+  # agent and extractor
+  algo: PPO
+  model_type: CnnPolicy
+  cnn_model_type: null
+  fc_features_dim: null
+
+training_params:
+  total_training_steps: 1_000_000
+  batch_size: 64
+  train_freq_type: step
+  train_freq_num: 100
+
+output_params:
+  savedir: /scratch/str8775/conda_env/rl_project/models/
+  savename: null
+  logdir: /scratch/str8775/conda_env/rl_project/logs
+
+callback_params:
+  ckpt_freq: 1000
+...
