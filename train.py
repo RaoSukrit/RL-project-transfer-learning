@@ -37,8 +37,19 @@ if __name__ == "__main__":
     with open(args.config, 'r') as fh:
         config = yaml.safe_load(fh)
 
+
+    # get configs
+    job_timestamp = int(time.time())
+
+    agent_config = config['agent_params']
+    training_config = config['training_params']
+
+    model_algo = agent_config['algo']
+    domain_name = config['env_params']['domain_name']
+    task_name = config['env_params']['task_name']
+
     # create log dir
-    logdir = make_log_dir(config, args.config)
+    logdir = make_log_dir(config, job_timestamp)
     print(f"Using logdir: {logdir}")
 
     # create env object
@@ -46,10 +57,6 @@ if __name__ == "__main__":
 
     # wrap env with Monitor
     env = Monitor(env, logdir)
-
-    # get configs
-    agent_config = config['agent_params']
-    training_config = config['training_params']
 
     # n_actions will be the dim of the output space of the network
     n_actions = env.action_space.shape[-1]
@@ -75,7 +82,7 @@ if __name__ == "__main__":
     train_freq = (training_config['train_freq_num'],
                   training_config['train_freq_type'])
 
-    model_algo = agent_config['algo']
+
 
     do_resume_training = training_config['resume_training']
     load_model_ckpt = training_config['load_model_ckpt_path']
@@ -127,11 +134,8 @@ if __name__ == "__main__":
     print_training_info(config)
 
     savedir = config['output_params']['savedir']
-    domain_name = config['env_params']['domain_name']
-    task_name = config['env_params']['task_name']
-
     if not do_resume_training:
-        callback.save_path = f"{callback.save_path}-{model_algo}-{domain_name}-{task_name}-{int(time.time())}"
+        callback.save_path = f"{callback.save_path}-{model_algo}-{domain_name}-{task_name}-{job_timestamp}"
     else:
         callback.save_path = load_model_ckpt
 
@@ -142,7 +146,7 @@ if __name__ == "__main__":
     # train the agent
     model.learn(
         total_timesteps=config['training_params']['total_training_steps'],
-        tb_log_name=f"{model_algo}-{domain_name}-{task_name}-{int(time.time())}",
+        tb_log_name=f"{model_algo}-{domain_name}-{task_name}-{job_timestamp}",
         callback=callback,
         progress_bar=True
     )
@@ -154,9 +158,9 @@ if __name__ == "__main__":
     savename = config['output_params']['savename']
     if not do_resume_training:
         if savename is None:
-            savename = f"{model_algo}-{domain_name}-{task_name}-{int(time.time())}"
+            savename = f"{model_algo}-{domain_name}-{task_name}-{job_timestamp}"
         else:
-            savename = f"{model_algo}-{savename}-{domain_name}-{task_name}-{int(time.time())}"
+            savename = f"{model_algo}-{savename}-{domain_name}-{task_name}-{job_timestamp}"
     else:
         savename = load_model_ckpt
 

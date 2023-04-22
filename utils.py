@@ -23,10 +23,19 @@ def test_env(env, num_steps=10):
         raise err
 
 
-def make_log_dir(cfg, cfg_name):
+def make_log_dir(config, job_timestamp):
     ''' Creates log directory '''
-    job_name = cfg_name.split('/')[1][:-5]
-    logdir = os.path.abspath(os.path.join(cfg['output_params']['logdir'], job_name))
+    model_algo = config['agent_params']['algo']
+    cnn_model_type = config['agent_params']['cnn_model_type']
+    domain_name = config['env_params']['domain_name']
+    task_name = config['env_params']['task_name']
+
+    logdir = os.path.abspath(os.path.join(config['output_params']['logdir'],
+                                          model_algo,
+                                          cnn_model_type,
+                                          domain_name,
+                                          task_name,
+                                          str(job_timestamp)))
     if not os.path.exists(logdir):
         os.makedirs(logdir, exist_ok=True)
     return logdir
