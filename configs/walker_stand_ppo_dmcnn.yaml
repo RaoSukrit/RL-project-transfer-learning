@@ -2,7 +2,7 @@
 # general params
 env_params:
   # high level params
-  domain_name: hopper
+  domain_name: walker
   task_name: stand
 
   # image params
@@ -15,15 +15,12 @@ env_params:
 
 agent_params:
   # agent and extractor
-  algo: DDPG
+  algo: PPO
   model_type: CnnPolicy
   cnn_model_type: dmcnn
   fc_features_dim: 128
-  tau: 0.001
 
 training_params:
-  resume_training: false
-  load_model_ckpt_path: null
   total_training_steps: 1_000_000
   batch_size: 64
   train_freq_type: step
