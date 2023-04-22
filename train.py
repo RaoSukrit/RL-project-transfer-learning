@@ -38,7 +38,7 @@ if __name__ == "__main__":
         config = yaml.safe_load(fh)
 
     # create log dir
-    logdir = make_log_dir(config)
+    logdir = make_log_dir(config, args.config)
 
     # create env object
     env = create_env(config)
