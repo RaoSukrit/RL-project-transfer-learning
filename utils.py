@@ -25,7 +25,8 @@ def test_env(env, num_steps=10):
 
 def make_log_dir(cfg, cfg_name):
     ''' Creates log directory '''
-    logdir = os.path.abspath(cfg['output_params']['logdir'] + cfg_name) 
+    job_name = cfg_name.split('/')[1]
+    logdir = os.path.abspath(cfg['output_params']['logdir'] + job_name) 
     if not os.path.exists(logdir):
         os.makedirs(logdir, exist_ok=True)
     return logdir
