@@ -88,6 +88,9 @@ if __name__ == "__main__":
     load_model_ckpt = training_config['load_model_ckpt_path']
 
     if not do_resume_training:
+        print("*" * 50)
+        print("Training from scratch!")
+        print("*" * 50)
         if model_algo == "PPO":
             # remove n_critics param
             policy_kwargs.pop('n_critics')
@@ -97,7 +100,8 @@ if __name__ == "__main__":
                         learning_rate=training_config['learning_rate'],
                         batch_size=training_config['batch_size'],
                         policy_kwargs=policy_kwargs,
-                        device=device)
+                        device=device,
+                        tensorboard_log=logdir)
 
         elif model_algo == "DDPG":
             model = DDPG(agent_config['model_type'],
@@ -109,15 +113,21 @@ if __name__ == "__main__":
                         policy_kwargs=policy_kwargs,
                         train_freq=train_freq,
                         device=device,
-                        action_noise=action_noise)
+                        action_noise=action_noise,
+                        tensorboard_log=logdir)
         else:
             raise (ValueError, f"invalid model algo provided {model_algo}. Only PPO and DDPG are accepted")
 
     else:
+        print("*" * 50)
+        print(f"Resuming training from {load_model_ckpt}!")
+        print("*" * 50)
         if model_algo == "PPO":
-            model = PPO.load(load_model_ckpt, verbose=1)
+            model = PPO.load(load_model_ckpt, verbose=1,
+                             tensorboard_log=logdir)
         elif model_algo == "DDPG":
-            model = DDPG.load(load_model_ckpt, verbose=1)
+            model = DDPG.load(load_model_ckpt, verbose=1,
+                              tensorboard_log=logdir)
         else:
             raise (ValueError, f"invalid model algo provided {model_algo}. Only PPO and DDPG are accepted")
 

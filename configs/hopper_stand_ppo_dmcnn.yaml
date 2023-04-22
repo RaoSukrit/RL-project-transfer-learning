@@ -23,7 +23,7 @@ agent_params:
 training_params:
   resume_training: false
   load_model_ckpt_path: null
-  total_training_steps: 1_000_000
+  total_training_steps: 10_000_000
   batch_size: 64
   train_freq_type: step
   train_freq_num: 100
