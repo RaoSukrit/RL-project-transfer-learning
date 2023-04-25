@@ -97,6 +97,7 @@ if __name__ == "__main__":
             model = PPO(agent_config['model_type'],
                         env,
                         verbose=1,
+                        learning_starts=training_config['learning_starts'],                             
                         learning_rate=training_config['learning_rate'],
                         batch_size=training_config['batch_size'],
                         policy_kwargs=policy_kwargs,
@@ -107,6 +108,8 @@ if __name__ == "__main__":
             model = DDPG(agent_config['model_type'],
                         env,
                         verbose=1,
+                        buffer_size=training_config['buffer_size'], 
+                        learning_starts=training_config['learning_starts'],
                         learning_rate=training_config['learning_rate'],
                         batch_size=training_config['batch_size'],
                         tau=agent_config['tau'],
@@ -120,6 +123,8 @@ if __name__ == "__main__":
             model = TD3(agent_config['model_type'],
                         env,
                         verbose=1,
+                        buffer_size=training_config['buffer_size'], 
+                        learning_starts=training_config['learning_starts'],
                         learning_rate=training_config['learning_rate'],
                         batch_size=training_config['batch_size'],
                         tau=agent_config['tau'],
@@ -163,18 +168,18 @@ if __name__ == "__main__":
                               tensorboard_log=logdir)
         elif model_algo == "TD3":
             model = TD3.load(load_model_ckpt,
-                    env,
-                    verbose=1,
-                    buffer_size=training_config['buffer_size'], 
-                    learning_starts=training_config['learning_starts'],
-                    learning_rate=training_config['learning_rate'],
-                    batch_size=training_config['batch_size'],
-                    tau=agent_config['tau'],
-                    policy_kwargs=policy_kwargs,
-                    train_freq=train_freq,
-                    device=device,
-                    action_noise=action_noise,
-                    tensorboard_log=logdir)
+                             env,
+                             verbose=1,
+                             buffer_size=training_config['buffer_size'], 
+                             learning_starts=training_config['learning_starts'],
+                             learning_rate=training_config['learning_rate'],
+                             batch_size=training_config['batch_size'],
+                             tau=agent_config['tau'],
+                             policy_kwargs=policy_kwargs,
+                             train_freq=train_freq,
+                             device=device,
+                             action_noise=action_noise,
+                             tensorboard_log=logdir)
         else:
             raise (ValueError, f"invalid model algo provided {model_algo}. Only PPO and DDPG are accepted")
 
