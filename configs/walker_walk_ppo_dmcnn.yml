@@ -2,8 +2,8 @@
 # general params
 env_params:
   # high level params
-  domain_name: hopper
-  task_name: stand
+  domain_name: walker
+  task_name: walk
 
   # image params
   height: 240
@@ -17,17 +17,17 @@ agent_params:
   # agent and extractor
   algo: PPO
   model_type: CnnPolicy
-  cnn_model_type: null
-  fc_features_dim: null
+  cnn_model_type: dmcnn
+  fc_features_dim: 128
 
 training_params:
   resume_training: false
   load_model_ckpt_path: null
-  total_training_steps: 1_000_000
+  total_training_steps: 10_000_000
   batch_size: 64
   train_freq_type: step
   train_freq_num: 100
-  learning_rate: 0.0001
+  learning_rate: 0.0003
 
 output_params:
   savedir: /scratch/str8775/conda_env/rl_project/models/

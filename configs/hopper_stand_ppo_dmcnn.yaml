@@ -21,7 +21,9 @@ agent_params:
   fc_features_dim: 128
 
 training_params:
-  total_training_steps: 1_000_000
+  resume_training: true
+  load_model_ckpt_path: /scratch/str8775/conda_env/rl_project/logs/PPO/dmcnn/hopper/stand/1682178113/best_model-PPO-hopper-stand-1682178113.zip
+  total_training_steps: 10_000_000
   batch_size: 64
   train_freq_type: step
   train_freq_num: 100
