@@ -182,13 +182,10 @@ if __name__ == "__main__":
         os.makedirs(savedir, exist_ok=True)
 
     savename = config['output_params']['savename']
-    if not do_resume_training:
-        if savename is None:
-            savename = f"{model_algo}-{domain_name}-{task_name}-{job_timestamp}"
-        else:
-            savename = f"{model_algo}-{savename}-{domain_name}-{task_name}-{job_timestamp}"
+    if savename is None:
+        savename = f"{model_algo}-{domain_name}-{task_name}-{job_timestamp}"
     else:
-        savename = load_model_ckpt
+        savename = f"{model_algo}-{savename}-{domain_name}-{task_name}-{job_timestamp}"
 
     model_savepath = os.path.join(savedir, savename)
     model.save(model_savepath)
