@@ -36,7 +36,8 @@ def get_extractor(agent_cfg):
     cnn_type = agent_cfg['cnn_model_type']
     cnns = {'resnet18': resnet18.CustomCNN,
             'resnet34': resnet34.CustomCNN,
-            'dmcnn': dmcnn.CustomCNN}
+            'dmcnn': dmcnn.CustomCNN, 
+            'dmcnn2': dmcnn2.CustomCNN}
     return cnns[cnn_type]
 
 
