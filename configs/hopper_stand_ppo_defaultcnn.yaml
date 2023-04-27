@@ -32,7 +32,7 @@ training_params:
 output_params:
   savedir: /scratch/str8775/conda_env/rl_project/models/
   savename: null
-  logdir: /scratch/str8775/conda_env/rl_project/logs
+  logdir: /scratch/str8775/conda_env/rl_project/logs_new_runs
 
 callback_params:
   ckpt_freq: 1000

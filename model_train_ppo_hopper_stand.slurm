@@ -2,8 +2,8 @@
 
 #SBATCH --job-name=PPO-hopper-stand
 #SBATCH --open-mode=append
-#SBATCH --output=/scratch/str8775/conda_env/rl_project/logs/slurm/%x_%j.out
-#SBATCH --error=/scratch/str8775/conda_env/rl_project/logs/slurm/%x_%j.err
+#SBATCH --output=/scratch/str8775/conda_env/rl_project/logs_new_runs/slurm/%x_%j.out
+#SBATCH --error=/scratch/str8775/conda_env/rl_project/logs_new_runs/slurm/%x_%j.err
 #SBATCH --export=ALL
 #SBATCH --time=12:00:00
 #SBATCH --gres=gpu:0
