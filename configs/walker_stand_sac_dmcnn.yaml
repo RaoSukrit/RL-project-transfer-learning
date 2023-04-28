@@ -15,10 +15,11 @@ env_params:
 
 agent_params:
   # agent and extractor
-  algo: SAC
+  algo: PPO
   model_type: CnnPolicy
-  cnn_model_type: dmcnn2
+  cnn_model_type: dmcnn
   fc_features_dim: 128
+  tau: 0.001
 
 training_params:
   resume_training: true
