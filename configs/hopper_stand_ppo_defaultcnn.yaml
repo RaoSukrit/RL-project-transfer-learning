@@ -23,11 +23,24 @@ agent_params:
 training_params:
   resume_training: false
   load_model_ckpt_path: null
-  total_training_steps: 1_000_000
+  is_transfer_learning: true
+
+  total_training_steps: 3_000_000
+  use_sde: true
   batch_size: 64
   train_freq_type: step
   train_freq_num: 100
   learning_rate: 0.0001
+
+transfer_learning:
+  original_task:
+    domain_name: walker
+    task_name: stand
+
+  transfer_task:
+    domain_name: walker
+    task_name: walk
+
 
 output_params:
   savedir: /scratch/str8775/conda_env/rl_project/models/

@@ -19,7 +19,7 @@ class CustomCNN(BaseFeaturesExtractor):
         # get input channels
         n_input_channels = observation_space.shape[0]
 
-        # 3 conv layers with 32 filters each 
+        # 3 conv layers with 32 filters each
         self.cnn = nn.Sequential(
             nn.Conv2d(n_input_channels, 32, kernel_size=8, stride=4, padding=0),
             nn.ReLU(),
@@ -38,9 +38,9 @@ class CustomCNN(BaseFeaturesExtractor):
 
         # 2 linear fc layers
         self.linear = nn.Sequential(
-            nn.Linear(n_flatten, 200), 
+            nn.Linear(n_flatten, 200),
             nn.ReLU(),
-            nn.Linear(200, fc_features_dim), 
+            nn.Linear(200, fc_features_dim),
             nn.ReLU()
         )
 

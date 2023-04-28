@@ -2,12 +2,12 @@
 # general params
 env_params:
   # high level params
-  domain_name: hopper
-  task_name: stand
+  domain_name: walker
+  task_name: walk
 
   # image params
-  height: 224
-  width: 224
+  height: 240
+  width: 320
 
   # basic env params
   from_pixels: true
@@ -15,18 +15,21 @@ env_params:
 
 agent_params:
   # agent and extractor
-  algo: PPO
+  algo: SAC
   model_type: CnnPolicy
-  cnn_model_type: resnet18
+  cnn_model_type: dmcnn2
   fc_features_dim: 128
 
 training_params:
-  resume_training: false
-  load_model_ckpt_path: null
+  resume_training: true
+  load_model_ckpt_path: /scratch/str8775/conda_env/rl_project/logs/transfer_learning/PPO/dmcnn/walker/stand/1682639146/best_model-PPO-walker-stand-1682639146.zip
   is_transfer_learning: true
 
   total_training_steps: 3_000_000
   use_sde: true
+  batch_size: 64
+  train_freq_type: step
+  train_freq_num: 500
   learning_rate: 0.0003
 
 transfer_learning:
@@ -38,11 +41,10 @@ transfer_learning:
     domain_name: walker
     task_name: walk
 
-
 output_params:
   savedir: /scratch/str8775/conda_env/rl_project/models/
   savename: null
-  logdir: /scratch/str8775/conda_env/rl_project/logs_new_runs
+  logdir: /scratch/str8775/conda_env/rl_project/logs/
 
 callback_params:
   ckpt_freq: 1000

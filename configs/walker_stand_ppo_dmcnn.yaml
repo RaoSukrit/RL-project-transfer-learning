@@ -21,18 +21,31 @@ agent_params:
   fc_features_dim: 128
 
 training_params:
-  resume_training: true
-  load_model_ckpt_path: /scratch/str8775/conda_env/rl_project/logs/PPO/dmcnn/walker/stand/1682178115/best_model-PPO-walker-stand-1682178115.zip
-  total_training_steps: 10_000_000
+  resume_training: false
+  load_model_ckpt_path: null
+  is_transfer_learning: true
+
+  total_training_steps: 3_000_000
+  use_sde: true
   batch_size: 64
   train_freq_type: step
   train_freq_num: 100
   learning_rate: 0.0003
 
+transfer_learning:
+  original_task:
+    domain_name: walker
+    task_name: stand
+
+  transfer_task:
+    domain_name: walker
+    task_name: walk
+
+
 output_params:
-  savedir: /scratch/str8775/conda_env/rl_project/models/
+  savedir: /scratch/str8775/conda_env/rl_project/models/transfer_learning/
   savename: null
-  logdir: /scratch/str8775/conda_env/rl_project/logs_new_runs
+  logdir: /scratch/str8775/conda_env/rl_project/logs/transfer_learning/
 
 callback_params:
   ckpt_freq: 1000

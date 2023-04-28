@@ -23,11 +23,24 @@ agent_params:
 training_params:
   resume_training: true
   load_model_ckpt_path: /scratch/str8775/conda_env/rl_project/logs/best_model-PPO-hopper-stand-1682117816.zip
-  total_training_steps: 10_000_000
+  is_transfer_learning: true
+
+  total_training_steps: 3_000_000
+  use_sde: true
   batch_size: 64
   train_freq_type: step
   train_freq_num: 100
   learning_rate: 0.0003
+
+transfer_learning:
+  original_task:
+    domain_name: walker
+    task_name: stand
+
+  transfer_task:
+    domain_name: walker
+    task_name: walk
+
 
 output_params:
   savedir: /scratch/str8775/conda_env/rl_project/models/
