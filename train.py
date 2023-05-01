@@ -81,8 +81,7 @@ if __name__ == "__main__":
 
         # create model object that loads the pretained params for
         # the feature extractor
-        model = reload_model_from_ckpt_transfer_learn(pretrain_model,
-                                                      new_env_model)
+        model = transfer_weights(from_model=pretrain_model, to_model=new_env_model)
 
     # pre-trained model without transfer learning
     elif do_resume_training and not is_transfer_learning:

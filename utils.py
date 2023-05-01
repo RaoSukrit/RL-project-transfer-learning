@@ -196,40 +196,39 @@ def load_model(env, cfg, logdir, load_model_cpkt=None):
     return model
 
 '''
-Given a pretrained model and a new    
+Copy weights (in-place) with specified keywords from 
+from_model to to_model     
+@param from_model - model to copy weights from
+@param to_model - model to copy weights to 
+@param wt_keys - weights keywords that should be copied  
+@return to_model with specified weights copied  
 '''
-def reload_model_from_ckpt_transfer_learn(pretrain_model,
-                                          new_env_model):
-    debug = True
-    keywords = ['features_extractor']
-    # keywords = ['features_extractor', 'log_std']
+def transfer_weights(from_model, 
+                     to_model, 
+                     wt_keys = ['features_extractor']):
 
-    # get the state_dict (name: weight) mapping for both
-    # the pretrained and new envs.
-    # the state_dicts contain two keys, policy and policy.optimizer.
-    # for the new_env we want to set the weights of only feature extractor
-    # to the trained weights from the pretrained env
-    # and leave the remaining weights unchanged
-    pretrain_env_state_dict = pretrain_model.get_parameters()['policy']
-    new_env_state_dict = new_env_model.get_parameters()
+    # get state dicts 
+    from_model_state_dict = from_model.get_parameters()['policy']
+    to_model_state_dict = to_model.get_parameters()
 
-    for key, weight in pretrain_env_state_dict.items():
-        for keyword in keywords:
+    # iterate over from_model state_dict
+    for key, weight in from_model_state_dict.items():
+        for keyword in wt_keys:
+            # copy weight if it is a keyword weight
             if key.startswith(keyword):
-                new_env_state_dict['policy'][key] = weight
+                to_model_state_dict['policy'][key] = weight
 
     # run test to see if weights were updated succesfully
-    for k, weight_dict in new_env_state_dict.items():
+    for k, weight_dict in to_model_state_dict.items():
         if k == 'policy':
             for weight_key, updated_weight in weight_dict.items():
-                for keyword in keywords:
+                for keyword in wt_keys:
                     if weight_key.startswith(keyword):
                         assert torch.equal(updated_weight,
-                                           pretrain_env_state_dict[weight_key]), f"Weights updated incorrectly. Mismatch for {weight_key}"
+                                           from_model_state_dict[weight_key]), f"Weights updated incorrectly. Mismatch for {weight_key}"
 
-    new_env_model.set_parameters(new_env_state_dict)
-
-    return new_env_model
+    to_model.set_parameters(to_model_state_dict)
+    return to_model
 
 '''
 Prints out important info from specified config
