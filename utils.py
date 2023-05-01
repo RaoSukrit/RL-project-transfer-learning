@@ -255,51 +255,35 @@ def reload_model_from_ckpt(env, config,
 
 
 def reload_model_from_ckpt_transfer_learn(pretrain_model,
-                                          new_env_model,
-                                          debug=False):
-
+                                          new_env_model):
+    debug = True
     keywords = ['features_extractor']
     # keywords = ['features_extractor', 'log_std']
 
+    # get the state_dict (name: weight) mapping for both
+    # the pretrained and new envs.
+    # the state_dicts contain two keys, policy and policy.optimizer.
+    # for the new_env we want to set the weights of only feature extractor
+    # to the trained weights from the pretrained env
+    # and leave the remaining weights unchanged
     pretrain_env_state_dict = pretrain_model.get_parameters()['policy']
-    new_env_state_dict = new_env_model.get_parameters()['policy']
-
-    if debug:
-        print("*" * 50)
-        print("New Env Model State Dict")
-        # print(type(new_env_model))
-        print(new_env_model.get_parameters()['policy'].keys())
-
-    pretrain_feat_ext_state_dict = OrderedDict()
-    pretrain_feat_ext_state_dict['policy'] = OrderedDict()
-    pretrain_feat_ext_state_dict['policy.optimizer'] = \
-        new_env_model.get_parameters()['policy.optimizer']
+    new_env_state_dict = new_env_model.get_parameters()
 
     for key, weight in pretrain_env_state_dict.items():
         for keyword in keywords:
             if key.startswith(keyword):
-                # new_key = key.split('.', 1)[-1]
-                new_key = f"{key}"
-                # reload_model_state_dict[new_key] = weight
-                pretrain_feat_ext_state_dict['policy'][new_key] = weight
-            else:
-                new_key = f"{key}"
-                pretrain_feat_ext_state_dict['policy'][new_key] = \
-                    new_env_state_dict[new_key]
+                new_env_state_dict['policy'][key] = weight
 
-    if debug:
-        print("*" * 50)
-        print("Original State Dict From Checkpoint")
-        print(pretrain_env_state_dict.keys())
 
-        print("*" * 50)
-        print("Modified State Dict To Reload Feature Extractor Weights")
-        print(pretrain_feat_ext_state_dict.keys())
-        for k, v in pretrain_feat_ext_state_dict.items():
-            print(f"key={k}")
-        print("*" * 50)
+    # run test to see if weights were updated succesfully
+    for k, weight_dict in new_env_state_dict.items():
+        if k == 'policy':
+            for weight_key, updated_weight in weight_dict.items():
+                for keyword in keywords:
+                    if weight_key.startswith(keyword):
+                        assert torch.equal(updated_weight,
+                                           pretrain_env_state_dict[weight_key]), f"Weights updated incorrectly. Mismatch for {weight_key}"
 
-    print(new_env_model.get_parameters().keys())
-    pretrain_model.set_parameters(pretrain_feat_ext_state_dict)
+    new_env_model.set_parameters(new_env_state_dict)
 
-    return pretrain_model
+    return new_env_model
