@@ -2,10 +2,11 @@
 
 ## Code Structure 
 
-Main logic used to train agents in 'train.py'
-Custom CNN networks in 'extractors' folder
-Custom callbacks in 'callbacks' folder
-Utility functions in 'utils.py'
+Main logic used to train agents in 'train.py' <br>
+Custom CNN networks in 'extractors' folder <br>
+Custom callbacks in 'callbacks' folder <br>
+Utility functions in 'utils.py' <br>
+<br>
 
-Training configs in 'configs' folder
-SLURM scripts used to run jobs in 'jobs' folder
+Training configs in 'configs' folder <br>
+SLURM scripts used to run jobs in 'jobs' folder <br>
