@@ -1,5 +1,6 @@
 import argparse
 import yaml
+import numpy as np
 from stable_baselines3.common.vec_env import VecVideoRecorder
 
 from utils import * 
@@ -17,7 +18,7 @@ if __name__ == "__main__":
         cfg = yaml.safe_load(fh)
 
     # create video dir
-    video_folder = ''
+    video_folder = cfg['video_folder']
     print(f"Using videodir: {video_folder}")
 
     # create env object
@@ -40,10 +41,18 @@ if __name__ == "__main__":
     obs = env.reset()
 
     # run and record model 
+    lstm_states = None
+    episode_starts = np.ones((env.num_envs,), dtype=bool)
     try:
         for _ in range(cfg['video_length'] + 1):
-            action = model.predict(obs)
-            obs, reward, done, info = env.step(action)
+            action, lstm_states = model.predict(
+                obs,
+                state=lstm_states,
+                episode_start=episode_starts,
+                deterministic=True,
+            )
+            obs, _, dones, _ = env.step(action)
+            episode_starts = dones
     except KeyboardInterrupt:
         pass
 
