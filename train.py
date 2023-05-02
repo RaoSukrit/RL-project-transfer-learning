@@ -2,6 +2,7 @@ import os
 import yaml
 import argparse
 import torch
+import time
 from stable_baselines3 import PPO, DDPG, SAC
 from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.vec_env import DummyVecEnv, VecCheckNan
@@ -110,11 +111,12 @@ if __name__ == "__main__":
     # print training info
     print_training_info(cfg)
 
-    # more 
+    # more params
     savedir = cfg['output_params']['savedir']
     model_algo = cfg['agent_params']['algo']
     domain_name = cfg['env_params']['domain_name']
     task_name = cfg['env_params']['task_name']
+    job_timestamp = int(time.time())
 
     # set checkpoint path 
     if not do_resume_training:
