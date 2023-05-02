@@ -144,10 +144,10 @@ def load_model(env, cfg, logdir, load_model_cpkt=None):
         policy_kwargs.pop('n_critics')
         
         # Use SDE action noise
-        if training_cfg['use_sde']:
+        use_sde = training_cfg['use_sde']
+        if use_sde:
             action_noise = None
-            use_sde = training_cfg['use_sde']
-
+            
         model = PPO(model_type,
                     env,
                     verbose=1,
@@ -173,9 +173,9 @@ def load_model(env, cfg, logdir, load_model_cpkt=None):
 
     elif model_algo == "SAC":
         # Use SDE action noise
-        if training_cfg['use_sde']:
+        use_sde = training_cfg['use_sde']
+        if use_sde:
             action_noise = None
-            use_sde = training_cfg['use_sde']
 
         model = SAC(model_type,
                     env,
