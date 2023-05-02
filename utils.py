@@ -136,9 +136,6 @@ def load_model(env, cfg, logdir, load_model_cpkt=None):
     # create policy kwargs
     policy_kwargs = define_policy_kwargs(env, cfg)
 
-    # load model if specified, otherwise set model type
-    model_type = load_model_cpkt if load_model_cpkt else agent_cfg['model_type']
-
     if model_algo == "PPO":
         # remove n_critics param
         policy_kwargs.pop('n_critics')
@@ -148,7 +145,18 @@ def load_model(env, cfg, logdir, load_model_cpkt=None):
         if use_sde:
             action_noise = None
             
-        model = PPO(model_type,
+        if not load_model_cpkt: 
+            model = PPO(agent_cfg['model_type'],
+                    env,
+                    verbose=1,
+                    learning_rate=training_cfg['learning_rate'],
+                    batch_size=training_cfg['batch_size'],
+                    policy_kwargs=policy_kwargs,
+                    use_sde=use_sde,
+                    device=device,
+                    tensorboard_log=logdir)
+        else: 
+            model = PPO.load(load_model_cpkt,
                     env,
                     verbose=1,
                     learning_rate=training_cfg['learning_rate'],
@@ -159,17 +167,31 @@ def load_model(env, cfg, logdir, load_model_cpkt=None):
                     tensorboard_log=logdir)
 
     elif model_algo == "DDPG":
-        model = DDPG(model_type,
-                    env,
-                    verbose=1,
-                    learning_rate=training_cfg['learning_rate'],
-                    batch_size=training_cfg['batch_size'],
-                    tau=agent_cfg['tau'],
-                    policy_kwargs=policy_kwargs,
-                    train_freq=train_freq,
-                    device=device,
-                    action_noise=action_noise,
-                    tensorboard_log=logdir)
+        if not load_model_cpkt: 
+            model = DDPG(agent_cfg['model_type'],
+                        env,
+                        verbose=1,
+                        learning_rate=training_cfg['learning_rate'],
+                        batch_size=training_cfg['batch_size'],
+                        tau=agent_cfg['tau'],
+                        policy_kwargs=policy_kwargs,
+                        train_freq=train_freq,
+                        device=device,
+                        action_noise=action_noise,
+                        tensorboard_log=logdir)
+        else: 
+            model = DDPG.load(load_model_cpkt,
+            env,
+            verbose=1,
+            learning_rate=training_cfg['learning_rate'],
+            batch_size=training_cfg['batch_size'],
+            tau=agent_cfg['tau'],
+            policy_kwargs=policy_kwargs,
+            train_freq=train_freq,
+            device=device,
+            action_noise=action_noise,
+            tensorboard_log=logdir)
+
 
     elif model_algo == "SAC":
         # Use SDE action noise
@@ -177,18 +199,32 @@ def load_model(env, cfg, logdir, load_model_cpkt=None):
         if use_sde:
             action_noise = None
 
-        model = SAC(model_type,
-                    env,
-                    verbose=1,
-                    learning_rate=training_cfg['learning_rate'],
-                    batch_size=training_cfg['batch_size'],
-                    tau=agent_cfg['tau'],
-                    train_freq=train_freq,
-                    action_noise=action_noise,
-                    use_sde=use_sde,
-                    policy_kwargs=policy_kwargs,
-                    device=device,
-                    tensorboard_log=logdir)
+        if not load_model_cpkt: 
+            model = SAC(agent_cfg['model_type'],
+                        env,
+                        verbose=1,
+                        learning_rate=training_cfg['learning_rate'],
+                        batch_size=training_cfg['batch_size'],
+                        tau=agent_cfg['tau'],
+                        train_freq=train_freq,
+                        action_noise=action_noise,
+                        use_sde=use_sde,
+                        policy_kwargs=policy_kwargs,
+                        device=device,
+                        tensorboard_log=logdir)
+        else: 
+            model = SAC.load(load_model_cpkt,
+                        env,
+                        verbose=1,
+                        learning_rate=training_cfg['learning_rate'],
+                        batch_size=training_cfg['batch_size'],
+                        tau=agent_cfg['tau'],
+                        train_freq=train_freq,
+                        action_noise=action_noise,
+                        use_sde=use_sde,
+                        policy_kwargs=policy_kwargs,
+                        device=device,
+                        tensorboard_log=logdir)
     else:
         # invalid model
         raise (ValueError, f"invalid model algo provided {model_algo}. Only PPO, SAC, TD3 and DDPG are accepted")
